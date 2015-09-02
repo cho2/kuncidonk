@@ -1,0 +1,54 @@
+<script src="bundle.js"></script>
+<script>
+var data;
+var signature
+
+var verify = function(){
+	var pem = document.getElementById("publicKey").value;
+	PKIWebSDK.Key.parsePEM(pem, "SHA-256")
+		.then(function(publicKey){
+			publicKey.verify(signature, data)
+				.then(function(isValid){
+					alert(isValid ? "Sip gan":"Nggak sip gan");
+				})
+	})
+}
+
+setTimeout(function(){
+	var fileInput = document.getElementById("file");
+	fileInput.addEventListener("change",function(evt){
+		var files = evt.target.files;
+		console.log(files);
+		var reader = new FileReader();
+		reader.readAsArrayBuffer(files[0]);
+		reader.onload = function(){
+			data = reader.result;
+			console.log(data);
+		}
+	})
+	var signatureInput = document.getElementById("signature");
+	signatureInput.addEventListener("change",function(evt){
+		var files = evt.target.files;
+		console.log(files);
+		var reader = new FileReader();
+		reader.readAsArrayBuffer(files[0]);
+		reader.onload = function(){
+			signature = reader.result;
+			console.log(data);
+		}
+	})
+}, 500)
+
+</script>
+<p>Berkas</p>
+<input type=file id="file"></input>
+<br>
+<p>Tandatangan</p>
+<input type=file id="signature"></input>
+<br>
+<p>Kunci Publik</p>
+<br>
+<textarea id="publicKey"></textarea>
+<br>
+<button onClick="verify()">Cek donk cyin</button>
+<br>

@@ -1,0 +1,29 @@
+<script src="bundle.js"></script>
+<script>
+var generate = function(){
+	PKIWebSDK.Key.generatePair("SHA-256")
+		.then(function(keyPair){
+			console.log(keyPair);			
+			keyPair.privateKey.toPEM()
+				.then(function(pemString){
+					var privateKeyTextarea = document.getElementById("privateKey");
+					privateKeyTextarea.value = pemString;
+				})
+			keyPair.publicKey.toPEM()
+				.then(function(pemString){
+					var publicKeyTextarea = document.getElementById("publicKey");
+					publicKeyTextarea.value = pemString;
+				})
+		})
+}
+</script>
+
+<button onClick="generate()">Bikin donk cyin</button>
+<br>
+<p>Kunci Privat</p>
+<br>
+<textarea id="privateKey"></textarea>
+<br>
+<p>Kunci Publik</p>
+<br>
+<textarea id="publicKey"></textarea>

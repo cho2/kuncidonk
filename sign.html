@@ -1,0 +1,50 @@
+<script src="bundle.js"></script>
+<script>
+var data;
+
+var sign = function(){
+	var pem = document.getElementById("privateKey").value;
+	PKIWebSDK.Key.parsePEM(pem,"SHA-256")
+		.then(function(privateKey){
+			privateKey.sign(data)
+				.then(function(signature){
+					console.log(signature);
+					download(signature);
+				})
+		})
+}
+setTimeout(function(){
+	var fileInput = document.getElementById("file");
+	fileInput.addEventListener("change",function(evt){
+		var files = evt.target.files;
+		console.log(files);
+		var reader = new FileReader();
+		reader.readAsArrayBuffer(files[0]);
+		reader.onload = function(){
+			data = reader.result;
+			console.log(data);
+		}
+	})
+}, 500)
+
+var download = function(buffer){
+	var blob = new Blob([buffer], {type:"text/plain"});
+	var url = URL.createObjectURL(blob);
+	var a = document.createElement("a");
+	a.href = url;
+	a.download = "signature.txt";
+	document.body.appendChild(a);
+	a.click();
+	
+}
+
+</script>
+
+<input type=file id="file"></input>
+<br>
+<p>Kunci Privat</p>
+<br>
+<textarea id="privateKey"></textarea>
+<br>
+<button onClick="sign()">Tandatangan donk cyin</button>
+<br>
